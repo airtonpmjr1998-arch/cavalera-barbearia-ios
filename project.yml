@@ -1,0 +1,51 @@
+name: CavaleraBarbearia
+
+options:
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "16.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+
+targets:
+  CavaleraBarbearia:
+    type: application
+    platform: iOS
+    sources:
+      - path: CavaleraBarbearia
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: br.com.cavalerabarbearia.ios
+        PRODUCT_NAME: Cavalera Barbearia
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
+        CODE_SIGN_STYLE: Automatic
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO
+
+    info:
+      path: CavaleraBarbearia/Info.plist
+      properties:
+        CFBundleDisplayName: Cavalera Barbearia
+        CFBundleName: CavaleraBarbearia
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchStoryboardName: LaunchScreen
+        UIRequiresFullScreen: false
+        WebAppURL: $(WEB_APP_URL)
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
