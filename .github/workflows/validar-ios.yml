@@ -1,0 +1,64 @@
+name: iOS - Validar projeto
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-26
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v7
+
+      - name: Validar WEB_APP_URL
+        shell: bash
+        env:
+          WEB_APP_URL: ${{ vars.WEB_APP_URL }}
+        run: |
+          if [ -z "$WEB_APP_URL" ]; then
+            echo "::error::Crie a variável WEB_APP_URL em Settings > Secrets and variables > Actions > Variables."
+            exit 1
+          fi
+
+          if [[ "$WEB_APP_URL" != https://* ]]; then
+            echo "::error::WEB_APP_URL precisa começar com https://"
+            exit 1
+          fi
+
+          echo "WEB_APP_URL configurada."
+
+      - name: Selecionar Xcode
+        shell: bash
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.6.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Instalar XcodeGen
+        shell: bash
+        run: |
+          brew install xcodegen
+          xcodegen --version
+
+      - name: Gerar projeto Xcode
+        shell: bash
+        run: |
+          xcodegen generate
+          test -d CavaleraBarbearia.xcodeproj
+
+      - name: Compilar para simulador
+        shell: bash
+        env:
+          WEB_APP_URL: ${{ vars.WEB_APP_URL }}
+        run: |
+          set -o pipefail
+
+          xcodebuild \
+            -project CavaleraBarbearia.xcodeproj \
+            -scheme CavaleraBarbearia \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            CODE_SIGNING_ALLOWED=NO \
+            WEB_APP_URL="$WEB_APP_URL" \
+            build
